@@ -1,0 +1,7 @@
+{
+  "name": "Cervantes Code",
+  "description": "Entorno de desarrollo de código real con el Autobot Cervantes y enjambre de bots autónomos cuantificados para síntesis determinista, reparación y análisis sin dependencia de IA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
