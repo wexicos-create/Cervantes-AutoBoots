@@ -14,7 +14,7 @@ import { OLLAMA_MODELS } from '../data/ollamaEngine';
 type SdkTab = 'cli' | 'curl' | 'python' | 'javascript';
 
 export const OllamaSdksView: React.FC = () => {
-  const [selectedModel, setSelectedModel] = useState<string>('ramitmitra/qwen3.5-uncensored-9b-baburao');
+  const [selectedModel, setSelectedModel] = useState<string>('llama3.2:latest');
   const [customModel, setCustomModel] = useState<string>('');
   const [activeSdkTab, setActiveSdkTab] = useState<SdkTab>('javascript');
   const [sdkPrompt, setSdkPrompt] = useState<string>(
@@ -101,8 +101,11 @@ console.log(response.message.content)`;
               <TerminalSquare className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-sm sm:text-base font-bold text-white">
-                SDKs Oficiales & Protocolos Ollama
+              <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                <span>SDKs Oficiales & Protocolos Ollama</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
+                  100% LOCAL (localhost:11434)
+                </span>
               </h3>
               <p className="text-xs text-slate-400">
                 Llamadas nativas por CLI, cURL (REST API), Python (<code className="text-cyan-300">ollama-python</code>) y JavaScript (<code className="text-cyan-300">ollama-js</code>)
@@ -116,6 +119,14 @@ console.log(response.message.content)`;
               {modelToUse}
             </span>
           </div>
+        </div>
+
+        {/* Local Engine Privacy Guarantee Badge */}
+        <div className="bg-[#020718] border border-emerald-500/30 rounded-xl p-3 flex items-center gap-2.5 text-xs text-emerald-300">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
+          <p className="leading-snug">
+            <strong className="font-bold">Privacidad y Ejecución 100% Local:</strong> Ollama se ejecuta directamente en tu equipo (<code className="text-emerald-200">http://localhost:11434</code>). Ningún dato ni código procesado sale de tu red local ni se filtra a servidores externos.
+          </p>
         </div>
 
         {/* Model Chips */}

@@ -121,7 +121,7 @@ export default function App() {
       icon: <TerminalSquare className="w-4 h-4" />,
       badge: '4 PROTOCOLOS',
       badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
-      isOpen: true,
+      isOpen: false,
       isMinimized: false,
       isMaximized: false,
       zIndex: 9,
@@ -266,6 +266,14 @@ export default function App() {
       }));
       return nextZ;
     });
+
+    // Desplazamiento suave directo a la ventana seleccionada para visibilidad inmediata
+    setTimeout(() => {
+      const el = document.getElementById(`window-${id}`) || document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 80);
   };
 
   const toggleWindow = (id: string) => {
@@ -790,25 +798,6 @@ export default function App() {
           activeWindowId={activeWindowId}
         />
 
-        {/* Central Prompt & Quick Actions Box */}
-        <PromptBox
-          prompt={prompt}
-          setPrompt={setPrompt}
-          onGenerateOrEdit={handleGenerateOrEdit}
-          onAnalyzeAndFix={handleAnalyzeAndFix}
-          onGenerateTests={handleGenerateTests}
-          onLoadBuggySample={handleLoadBuggySample}
-          onOpenDesignTab={() => focusWindow('design')}
-          onOpenRepoTab={() => focusWindow('repo')}
-          onOpenOllamaTab={() => focusWindow('ollama-sdks')}
-          onOpenAuthorshipTab={() => focusWindow('authorship-privacy')}
-          onOpenNutrientsTab={() => focusWindow('coded-nutrients')}
-          isLoading={isLoading}
-          activeAction={activeAction}
-          selectedLanguage={selectedLanguage}
-          hasCode={code.trim().length > 0}
-        />
-
         {/* Dynamic Windows Grid / Tiled Layout Engine */}
         <div
           className={`grid gap-5 transition-all duration-300 ${
@@ -921,20 +910,39 @@ export default function App() {
               onFocus={() => focusWindow('editor')}
               className={workspaceLayout === 'split_ide_ollama' ? 'lg:col-span-1' : ''}
             >
-              <CodeEditor
-                code={code}
-                onChange={setCode}
-                language={selectedLanguage}
-                onFileDrop={(file) => {
-                  const reader = new FileReader();
-                  reader.onload = (e) => {
-                    const content = e.target?.result as string;
-                    setCode(content);
-                    showToast(`Archivo "${file.name}" cargado en el editor.`, 'success');
-                  };
-                  reader.readAsText(file);
-                }}
-              />
+              <div className="p-3 sm:p-4 space-y-4">
+                <PromptBox
+                  prompt={prompt}
+                  setPrompt={setPrompt}
+                  onGenerateOrEdit={handleGenerateOrEdit}
+                  onAnalyzeAndFix={handleAnalyzeAndFix}
+                  onGenerateTests={handleGenerateTests}
+                  onLoadBuggySample={handleLoadBuggySample}
+                  onOpenDesignTab={() => focusWindow('design')}
+                  onOpenRepoTab={() => focusWindow('repo')}
+                  onOpenOllamaTab={() => focusWindow('ollama-sdks')}
+                  onOpenAuthorshipTab={() => focusWindow('authorship-privacy')}
+                  onOpenNutrientsTab={() => focusWindow('coded-nutrients')}
+                  isLoading={isLoading}
+                  activeAction={activeAction}
+                  selectedLanguage={selectedLanguage}
+                  hasCode={code.trim().length > 0}
+                />
+                <CodeEditor
+                  code={code}
+                  onChange={setCode}
+                  language={selectedLanguage}
+                  onFileDrop={(file) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                      const content = e.target?.result as string;
+                      setCode(content);
+                      showToast(`Archivo "${file.name}" cargado en el editor.`, 'success');
+                    };
+                    reader.readAsText(file);
+                  }}
+                />
+              </div>
             </WindowFrame>
           )}
 

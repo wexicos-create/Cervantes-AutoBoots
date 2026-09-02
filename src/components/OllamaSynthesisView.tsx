@@ -40,7 +40,7 @@ export const OllamaSynthesisView: React.FC<OllamaSynthesisViewProps> = ({
   onApplyCodeToEditor,
   onOpenEditorTab,
 }) => {
-  const [selectedModel, setSelectedModel] = useState<string>('ramitmitra/qwen3.5-uncensored-9b-baburao');
+  const [selectedModel, setSelectedModel] = useState<string>('llama3.2:latest');
   const [customModel, setCustomModel] = useState<string>('');
   const [activeMode, setActiveMode] = useState<OllamaCollabMode>('hybrid_bot_swarm');
   const [prompt, setPrompt] = useState<string>('');
