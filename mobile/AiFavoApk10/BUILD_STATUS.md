@@ -1,0 +1,1 @@
+Build pipeline refresh: Android SDK packages are pinned explicitly to platform-tools, Android 35, and build-tools 35.0.0 before Gradle assembleDebug. The first CI run failed during SDK setup before compilation; it did not assess Kotlin sources.
