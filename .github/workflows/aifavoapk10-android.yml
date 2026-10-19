@@ -1,0 +1,46 @@
+name: AiFavoApk 10 Ultra Plus Android APK
+on:
+  workflow_dispatch:
+  push:
+    branches: [ aifavoapk10-ultra-plus ]
+    paths:
+      - 'mobile/AiFavoApk10/**'
+      - '.github/workflows/aifavoapk10-android.yml'
+permissions:
+  contents: write
+  actions: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Compile and package installable debug APK
+        working-directory: mobile/AiFavoApk10
+        run: gradle --no-daemon clean assembleDebug
+      - name: Stage APK
+        run: cp mobile/AiFavoApk10/app/build/outputs/apk/debug/app-debug.apk AiFavoApk10-UltraPlus-Gold.apk
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AiFavoApk10-UltraPlus-Gold
+          path: AiFavoApk10-UltraPlus-Gold.apk
+          if-no-files-found: error
+          retention-days: 14
+      - name: Publish direct APK download
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: aifavoapk10-ultra-plus-v0.3.0-${{ github.run_number }}
+          name: AiFavoApk10 Ultra Plus Gold v0.3.0 (build ${{ github.run_number }})
+          prerelease: true
+          generate_release_notes: true
+          files: AiFavoApk10-UltraPlus-Gold.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
