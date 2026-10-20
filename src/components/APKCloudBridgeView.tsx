@@ -277,7 +277,7 @@ export const APKCloudBridgeView: React.FC<APKCloudBridgeViewProps> = ({
           }`}
         >
           <Smartphone className="w-4 h-4" />
-          <span>Compilar APK Android (Pro & Hardware)</span>
+          <span>Compilación Android real</span>
         </button>
         <button
           onClick={() => setActiveTab('cloud')}
@@ -301,7 +301,7 @@ export const APKCloudBridgeView: React.FC<APKCloudBridgeViewProps> = ({
             <div className="inline-flex w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-300 items-center justify-center ring-1 ring-cyan-500/40 mb-1">
               <Smartphone className="w-6 h-6" />
             </div>
-            <h2 className="text-2xl font-black text-zinc-100 tracking-tight">Compilador APK Nube</h2>
+            <h2 className="text-2xl font-black text-zinc-100 tracking-tight">Compilación Android</h2>
             <p className="text-xs text-zinc-400 max-w-sm mx-auto leading-relaxed">
               Transforma tus proyectos web en aplicaciones Android firmadas con acceso completo a hardware y permisos avanzados.
             </p>
@@ -372,7 +372,7 @@ export const APKCloudBridgeView: React.FC<APKCloudBridgeViewProps> = ({
               disabled={isCompiling}
               className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-zinc-950 font-black py-3.5 px-4 rounded-xl text-sm transition-all shadow-lg shadow-cyan-950/50 active:scale-95 disabled:opacity-50 cursor-pointer"
             >
-              {isCompiling ? 'Compilando APK...' : 'Compilar y Descargar APK Firmado'}
+              {isCompiling ? 'Compilando APK...' : 'Enviar a compilador Android'}
             </button>
           </form>
 
@@ -404,7 +404,7 @@ export const APKCloudBridgeView: React.FC<APKCloudBridgeViewProps> = ({
                 <Cloud className="w-5 h-5" />
               </div>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
-                Diseñador de Acceso Cloud para APK
+                Conector de nube para proyectos Android
               </span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-zinc-100 tracking-tight">
@@ -442,7 +442,7 @@ export const APKCloudBridgeView: React.FC<APKCloudBridgeViewProps> = ({
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span>Estado: <strong>200 OK</strong></span>
             </div>
-            <div>Latencia APK ➔ Cloud: <strong>{simulatedPing.result.latencyMs}ms</strong></div>
+            <div>Respuesta API: <strong>{simulatedPing.result.latencyMs}ms</strong></div>
             <div>Nodo Cloud: <strong>{simulatedPing.result.region}</strong></div>
             <div>Handshake Cifrado: <strong className="text-emerald-300">TLS 1.3 / AES-256</strong></div>
           </div>
