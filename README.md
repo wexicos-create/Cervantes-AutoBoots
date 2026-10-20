@@ -1,6 +1,6 @@
 # Cervantes Code
 
-**Cervantes Code** es un entorno de desarrollo avanzado, unificado y cuantificado que integra automatización autónoma con bots, conexión directa con modelos locales a través de Ollama (SDKs y Playground), un puente de compilación en la nube para APKs de Android, y un Foro Comunitario con respaldo de autoría.
+**Cervantes Autobots** es un entorno de desarrollo avanzado, unificado y cuantificado que integra automatización autónoma con bots, conexión directa con modelos locales a través de Ollama (SDKs y Playground), un puente de compilación en la nube para APKs de Android, y un Foro Comunitario con respaldo de autoría.
 
 ## Características Principales
 
@@ -8,9 +8,9 @@
 - **El Autobot Cervantes**: Un super bot unificado y polimórfico, diseñado para asistir en lógica compleja sin depender de APIs comerciales invasivas.
 - **Enjambre de Auto-Bots**: IA distribuida orientada al diseño y arquitectura de software de cero bugs.
 - **Ollama AI Integration & SDKs**: Entorno de pruebas completo y lanzador de agentes autónomos, con soporte para CLI, cURL, Python y JavaScript.
-- **Compilador APK Android & Nube**: Compilación, firmado de hardware y empaquetado de aplicaciones a formato `.apk` nativo y listo para instalar.
+- **Compilación Android**: la interfaz ya no fabrica APKs ficticios. Para compilar y firmar proyectos reales se requiere conectar un worker Gradle/Android SDK y configurar la gestión segura de claves; hasta entonces, la función reporta claramente que no está disponible.
 - **Foro Comunitario y Registro de Autoría**: Respaldo criptográfico de código e inventos mediante firmas SHA-256 (Evidencia inmutable tipo GitHub).
-- **Diagnóstico y Pruebas Automáticas**: Análisis profundo del código y resolución de fallos en tiempo real.
+- **Diagnóstico y casos de prueba**: análisis estático y generación de casos. La ejecución de código de usuario requiere un runtime aislado; los casos no se muestran como aprobados si no se ejecutan.
 
 ---
 
@@ -26,3 +26,14 @@ Este proyecto y su código fuente son de **uso público y libre**, pero están e
 
 ---
 **Desarrollado y Arquitectado por Josué Israel Cervantes Alvarado.**
+
+
+## Estado funcional verificado (octubre de 2026)
+
+- El generador actual usa reglas y plantillas deterministas; no es un modelo general de IA y no garantiza código sin errores.
+- El analizador es estático y heurístico; no reemplaza compiladores ni auditorías de seguridad completas.
+- Los casos de prueba se pueden generar, pero no se ejecutan hasta conectar un runtime aislado.
+- La compilación de APK necesita un worker Gradle con Android SDK y firma configurada. La interfaz no descarga APKs falsos.
+- Los indicadores de conexión deben provenir de comprobaciones reales del servicio, no de latencias aleatorias.
+
+Estas limitaciones son explícitas para evitar presentar simulaciones como resultados reales.
