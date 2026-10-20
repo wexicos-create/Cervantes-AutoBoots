@@ -16,7 +16,6 @@ import { CodedNutrientsView } from './components/CodedNutrientsView';
 import { CommunityForumView } from './components/CommunityForumView';
 import { FileUploadModal } from './components/FileUploadModal';
 import { Footer } from './components/Footer';
-import { ThreeCanvas3D } from './components/ThreeCanvas3D';
 import { WindowFrame, WindowState } from './components/WindowFrame';
 import { CyberDock, WorkspaceLayout } from './components/CyberDock';
 import { ProgrammingLanguage, AnalysisResult, TestSuiteResult, TestCase, UniversalProject } from './types';
@@ -773,10 +772,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen text-white flex flex-col font-sans selection:bg-cyan-500 selection:text-black relative overflow-x-hidden">
-      {/* 3D Dark Blue Interactive Background Canvas */}
-      <ThreeCanvas3D />
-
+    <div className="ca-app min-h-screen text-white flex flex-col font-sans relative overflow-x-hidden">
       {/* Toast Notification */}
       {toastMessage && (
         <div
@@ -799,46 +795,46 @@ export default function App() {
         </div>
       )}
 
-      {/* Main Navigation Header */}
-      <Header
-        selectedLanguage={selectedLanguage}
-        onSelectLanguage={handleLanguageChange}
-        onUploadClick={() => setIsUploadModalOpen(true)}
-        onDownloadClick={handleDownloadCode}
-        onCopyClick={handleCopyCode}
-        copied={copied}
-        onResetSample={handleResetSample}
-        onOpenAuthorshipModal={() => focusWindow('authorship-privacy')}
-        onOpenWindow={(winId) => focusWindow(winId)}
-      />
-
-      {/* Main 3D OS Workspace */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 md:p-6 space-y-4 relative z-10">
-        {/* Floating CyberDock: Window Switcher & Workspace Modes */}
-        <CyberDock
-          windows={windows}
-          onToggleWindow={toggleWindow}
-          onRestoreAll={restoreAll}
-          onMinimizeAll={minimizeAll}
-          currentLayout={workspaceLayout}
-          onSelectLayout={handleSelectLayout}
-          activeWindowId={activeWindowId}
-        />
-
-        {/* Dynamic Windows Grid / Tiled Layout Engine */}
-        <div
-          className={`grid gap-5 transition-all duration-300 ${
-            workspaceLayout === 'split_ide_ollama'
-              ? 'grid-cols-1 lg:grid-cols-2'
-              : workspaceLayout === 'split_diagnostics_ide'
-              ? 'grid-cols-1 lg:grid-cols-2'
-              : workspaceLayout === 'split_repo_ide'
-              ? 'grid-cols-1 lg:grid-cols-2'
-              : 'grid-cols-1 xl:grid-cols-2'
-          }`}
-        >
+      <header className="ca-topbar">
+        <a className="ca-brand" href="#" onClick={(event) => { event.preventDefault(); focusWindow("editor"); }} aria-label="Cervantes Autobots, inicio">
+          <span className="ca-brand-mark">CA</span>
+          <span className="ca-brand-copy"><strong>Cervantes Autobots</strong><small>ESTUDIO DE DESARROLLO</small></span>
+        </a>
+        <div className="ca-topbar-right">
+          <span className="ca-project-state"><span className="ca-state-dot" /> Espacio de trabajo</span>
+          <label className="ca-language"><span>Lenguaje</span><select value={selectedLanguage} onChange={(event) => handleLanguageChange(event.target.value as ProgrammingLanguage)} aria-label="Lenguaje de programación">{LANGUAGES.map((lang) => <option key={lang.id} value={lang.id}>{lang.name}</option>)}</select></label>
+          <button className="ca-icon-button" onClick={() => setIsUploadModalOpen(true)} title="Importar archivo" aria-label="Importar archivo">↑</button>
+          <button className="ca-icon-button" onClick={handleCopyCode} title="Copiar código" aria-label="Copiar código">⧉</button>
+          <button className="ca-primary-button" onClick={handleDownloadCode}>Exportar código <span aria-hidden="true">↗</span></button>
+        </div>
+      </header>
+      <div className="ca-shell">
+        <aside className="ca-sidebar" aria-label="Navegación principal">
+          <div className="ca-side-heading">ESPACIO DE TRABAJO</div>
+          <button className={"ca-nav-item " + (activeWindowId === "editor" ? "is-active" : "")} onClick={() => focusWindow("editor")}><span className="ca-nav-icon">⌘</span><span><strong>Editor</strong><small>Código y generación</small></span></button>
+          <div className="ca-side-heading ca-side-spaced">CALIDAD DE CÓDIGO</div>
+          <button className={"ca-nav-item " + (activeWindowId === "diagnostics" ? "is-active" : "")} onClick={() => focusWindow("diagnostics")}><span className="ca-nav-icon">⌕</span><span><strong>Diagnóstico</strong><small>Revisión y reparación</small></span></button>
+          <button className={"ca-nav-item " + (activeWindowId === "tests" ? "is-active" : "")} onClick={() => focusWindow("tests")}><span className="ca-nav-icon">✓</span><span><strong>Pruebas</strong><small>Casos y resultados</small></span></button>
+          <div className="ca-side-heading ca-side-spaced">PROYECTOS</div>
+          <button className={"ca-nav-item " + (activeWindowId === "repo" ? "is-active" : "")} onClick={() => focusWindow("repo")}><span className="ca-nav-icon">▤</span><span><strong>Archivos y ZIP</strong><small>Proyecto multiparchivo</small></span></button>
+          <button className={"ca-nav-item " + (activeWindowId === "design" ? "is-active" : "")} onClick={() => focusWindow("design")}><span className="ca-nav-icon">✳</span><span><strong>Arquitectura</strong><small>Diseño asistido</small></span></button>
+          <button className={"ca-nav-item " + (activeWindowId === "apk-cloud" ? "is-active" : "")} onClick={() => focusWindow("apk-cloud")}><span className="ca-nav-icon">↥</span><span><strong>Android</strong><small>Compilación y nube</small></span></button>
+          <div className="ca-side-heading ca-side-spaced">AUTOMATIZACIÓN</div>
+          <button className={"ca-nav-item " + (activeWindowId === "coded-nutrients" ? "is-active" : "")} onClick={() => focusWindow("coded-nutrients")}><span className="ca-nav-icon">✧</span><span><strong>Autobot Cervantes</strong><small>Asistente de código</small></span></button>
+          <button className={"ca-nav-item " + (activeWindowId === "php-swarm" ? "is-active" : "")} onClick={() => focusWindow("php-swarm")}><span className="ca-nav-icon">⌘</span><span><strong>Laboratorio PHP</strong><small>Plantillas y patrones</small></span></button>
+          <button className={"ca-nav-item " + (activeWindowId === "ollama-synthesis" ? "is-active" : "")} onClick={() => focusWindow("ollama-synthesis")}><span className="ca-nav-icon">◉</span><span><strong>Modelos</strong><small>Conexiones locales</small></span></button>
+          <button className={"ca-nav-item " + (activeWindowId === "ollama-sdks" ? "is-active" : "")} onClick={() => focusWindow("ollama-sdks")}><span className="ca-nav-icon">⌁</span><span><strong>SDK y API</strong><small>Integraciones</small></span></button>
+          <button className={"ca-nav-item " + (activeWindowId === "ollama-agents" ? "is-active" : "")} onClick={() => focusWindow("ollama-agents")}><span className="ca-nav-icon">↗</span><span><strong>Agentes</strong><small>Herramientas externas</small></span></button>
+          <div className="ca-side-bottom">
+            <button className={"ca-nav-item " + (activeWindowId === "authorship-privacy" ? "is-active" : "")} onClick={() => focusWindow("authorship-privacy")}><span className="ca-nav-icon">◇</span><span><strong>Autoría y privacidad</strong><small>Licencias y protección</small></span></button>
+            <button className={"ca-nav-item " + (activeWindowId === "community-forum" ? "is-active" : "")} onClick={() => focusWindow("community-forum")}><span className="ca-nav-icon">◎</span><span><strong>Comunidad</strong><small>Foro y colaboración</small></span></button>
+          </div>
+        </aside>
+        <main className="ca-main">
+          <div className="ca-page-heading"><div><p className="ca-eyebrow">CERVANTES / WORKSPACE</p><h1>{windows[activeWindowId || "editor"]?.title || "Editor de código"}</h1><p className="ca-page-subtitle">Un entorno de desarrollo claro, modular y centrado en tu trabajo.</p></div><div className="ca-heading-meta"><span className="ca-meta-label">LENGUAJE ACTUAL</span><strong>{LANGUAGES.find((lang) => lang.id === selectedLanguage)?.name || selectedLanguage}</strong></div></div>
+          <div className="ca-content-column">
           {/* Window: El Autobot Cervantes (Super Bot Unificado) */}
-          {windows['coded-nutrients']?.isOpen && (
+          {windows['coded-nutrients']?.isOpen && activeWindowId === 'coded-nutrients' && (
             <WindowFrame
               id="coded-nutrients"
               title="El Autobot Cervantes • Super Bot Unificado Polimórfico"
@@ -866,7 +862,7 @@ export default function App() {
           )}
 
           {/* Window: Foro Comunitario (Respaldo de Autoría & Inventos No Existentes) */}
-          {windows['community-forum']?.isOpen && (
+          {windows['community-forum']?.isOpen && activeWindowId === 'community-forum' && (
             <WindowFrame
               id="community-forum"
               title="Foro Comunitario: Respaldo de Autoría & Registro de Inventos"
@@ -896,7 +892,7 @@ export default function App() {
           )}
 
           {/* Window: Garantía de Autoría, Privacidad & Bots */}
-          {windows['authorship-privacy']?.isOpen && (
+          {windows['authorship-privacy']?.isOpen && activeWindowId === 'authorship-privacy' && (
             <WindowFrame
               id="authorship-privacy"
               title="Marco de Autoría, Privacidad & Automatización con Bots"
@@ -922,7 +918,7 @@ export default function App() {
           )}
 
           {/* Window 1: IDE & Editor */}
-          {windows.editor.isOpen && (
+          {windows.editor.isOpen && activeWindowId === 'editor' && (
             <WindowFrame
               id="editor"
               title="Editor & IDE Principal"
@@ -937,7 +933,7 @@ export default function App() {
               onFocus={() => focusWindow('editor')}
               className={workspaceLayout === 'split_ide_ollama' ? 'lg:col-span-1' : ''}
             >
-              <div className="p-3 sm:p-4 space-y-4">
+              <div className="ca-editor-stack">
                 <PromptBox
                   prompt={prompt}
                   setPrompt={setPrompt}
@@ -974,7 +970,7 @@ export default function App() {
           )}
 
           {/* Window 2: Ollama SDKs & API Playground (CLI • cURL • Python • JavaScript) */}
-          {windows['ollama-sdks']?.isOpen && (
+          {windows['ollama-sdks']?.isOpen && activeWindowId === 'ollama-sdks' && (
             <WindowFrame
               id="ollama-sdks"
               title="SDKs Ollama & Playground de Conexión"
@@ -1002,7 +998,7 @@ export default function App() {
           )}
 
           {/* Window 3: Agent Launchers (Claude Code • OpenCode • Hermes • OpenClaw) */}
-          {windows['ollama-agents']?.isOpen && (
+          {windows['ollama-agents']?.isOpen && activeWindowId === 'ollama-agents' && (
             <WindowFrame
               id="ollama-agents"
               title="Lanzador de Agentes Autónomos"
@@ -1021,7 +1017,7 @@ export default function App() {
           )}
 
           {/* Window 4: Síntesis Ollama & Enjambre de Bots */}
-          {windows['ollama-synthesis']?.isOpen && (
+          {windows['ollama-synthesis']?.isOpen && activeWindowId === 'ollama-synthesis' && (
             <WindowFrame
               id="ollama-synthesis"
               title="Modelos locales y conexiones"
@@ -1049,7 +1045,7 @@ export default function App() {
           )}
 
           {/* Window 3: Universal Multi-File Repo (.ZIP) */}
-          {windows.repo.isOpen && (
+          {windows.repo.isOpen && activeWindowId === 'repo' && (
             <WindowFrame
               id="repo"
               title="Repositorio Multi-Archivo (.ZIP)"
@@ -1081,7 +1077,7 @@ export default function App() {
           )}
 
           {/* Window 4: Diagnostics & Fixer */}
-          {windows.diagnostics.isOpen && (
+          {windows.diagnostics.isOpen && activeWindowId === 'diagnostics' && (
             <WindowFrame
               id="diagnostics"
               title="Diagnóstico & Reparación de Fallas"
@@ -1105,7 +1101,7 @@ export default function App() {
           )}
 
           {/* Window 5: Automated Test Suite */}
-          {windows.tests.isOpen && (
+          {windows.tests.isOpen && activeWindowId === 'tests' && (
             <WindowFrame
               id="tests"
               title="Suite de Pruebas Automáticas"
@@ -1129,7 +1125,7 @@ export default function App() {
           )}
 
           {/* Window 6: Auto-Bots Arquitectos */}
-          {windows.design.isOpen && (
+          {windows.design.isOpen && activeWindowId === 'design' && (
             <WindowFrame
               id="design"
               title="Diseño Auto-Bot (0 Bugs)"
@@ -1156,7 +1152,7 @@ export default function App() {
           )}
 
           {/* Window 7: PHP Swarm */}
-          {windows['php-swarm'].isOpen && (
+          {windows['php-swarm']?.isOpen && activeWindowId === 'php-swarm' && (
             <WindowFrame
               id="php-swarm"
               title="Laboratorio PHP (simulación)"
@@ -1182,7 +1178,7 @@ export default function App() {
           )}
 
           {/* Window 8: APK Cloud Bridge */}
-          {windows['apk-cloud'].isOpen && (
+          {windows['apk-cloud']?.isOpen && activeWindowId === 'apk-cloud' && (
             <WindowFrame
               id="apk-cloud"
               title="APK ➔ Nube Bridge"
@@ -1207,8 +1203,9 @@ export default function App() {
               />
             </WindowFrame>
           )}
-        </div>
-      </main>
+          </div>
+        </main>
+      </div>
 
       {/* Main Global Footer with Credits & Open Collaboration Manifesto */}
       <Footer
