@@ -188,51 +188,78 @@ export const APKCloudBridgeView: React.FC<APKCloudBridgeViewProps> = ({
   const handleStartCompilation = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!compilerZipFile) {
-      onShowToast('Selecciona un archivo ZIP con tu código web (index.html en la raíz).', 'error');
+      onShowToast('Selecciona un ZIP de proyecto Android Gradle (no una web HTML).', 'error');
+      return;
+    }
+    if (!compilerZipFile.name.toLowerCase().endsWith('.zip')) {
+      onShowToast('El archivo debe tener extensión .zip.', 'error');
+      return;
+    }
+    if (compilerZipFile.size > 50 * 1024 * 1024) {
+      onShowToast('El ZIP supera el límite de 50 MB.', 'error');
+      return;
+    }
+    if (!/^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)+$/.test(compilerPackageName.trim())) {
+      onShowToast('El identificador debe tener formato com.empresa.aplicacion.', 'error');
       return;
     }
 
     setIsCompiling(true);
-    setCompileProgress(5);
-    setCompileStatusText('Analizando archivos cargados...');
-
-    const steps = [
-      { progress: 15, text: 'Estructurando entorno de compilación...' },
-      { progress: 30, text: 'Instalando dependencias nativas del sistema...' },
-      { progress: 45, text: 'Configurando nombre, icono y permisos de hardware avanzados...' },
-      { progress: 65, text: 'Sincronizando con el servidor seguro en la nube...' },
-      { progress: 80, text: 'Compilando y firmando APK en entornos de producción...' },
-      { progress: 95, text: 'Preparando enlace de descarga directa...' },
-      { progress: 100, text: '¡Descarga lista! Enviando APK firmado...' },
-    ];
-
-    for (const step of steps) {
-      await new Promise((r) => setTimeout(r, 850));
-      setCompileProgress(step.progress);
-      setCompileStatusText(step.text);
-    }
-
+    setCompileProgress(10);
+    setCompileStatusText('Preparando proyecto Android para el servicio de compilación…');
     try {
-      const zip = new JSZip();
-      zip.file('app-release-signed.apk', 'PK\x03\x04... [APK Signed Binary for ' + compilerAppName + '] ...');
-      zip.file('AndroidManifest_Injected.xml', `<!-- Permisos de Hardware Inyectados -->\n<uses-permission android:name="android.permission.INTERNET" />\n<uses-permission android:name="android.permission.CAMERA" />\n<uses-permission android:name="android.permission.RECORD_AUDIO" />\n<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />\n<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />\n<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />`);
-      zip.file('README.txt', `App: ${compilerAppName}\nPackage: ${compilerPackageName}\nEstado: Firmado y listo para instalar.`);
+      const form = new FormData();
+      form.append('projectZip', compilerZipFile);
+      form.append('appName', compilerAppName.trim());
+      form.append('packageName', compilerPackageName.trim());
+      if (compilerIconFile) form.append('icon', compilerIconFile);
 
-      const blob = await zip.generateAsync({ type: 'blob' });
+      setCompileProgress(25);
+      setCompileStatusText('Enviando el proyecto al compilador real…');
+      const response = await fetch('/api/apk/build', { method: 'POST', body: form });
+      const contentType = response.headers.get('content-type') || '';
+      if (!response.ok) {
+        let message = `El servicio de compilación respondió HTTP ${response.status}.`;
+        if (contentType.includes('application/json')) {
+          const body = await response.json().catch(() => null);
+          if (body?.error) message = String(body.error);
+        } else if (response.status === 404) {
+          message = 'El compilador Android no está conectado en este despliegue. No se generó ningún APK falso. Hace falta activar el servicio de compilación del servidor.';
+        }
+        throw new Error(message);
+      }
+      if (!contentType.includes('application/vnd.android.package-archive') &&
+          !contentType.includes('application/octet-stream') &&
+          !contentType.includes('application/zip')) {
+        throw new Error('La respuesta del servidor no es un archivo APK descargable.');
+      }
+
+      setCompileProgress(85);
+      setCompileStatusText('Verificando el archivo generado…');
+      const blob = await response.blob();
+      if (blob.size < 4) throw new Error('El archivo recibido está vacío o incompleto.');
+      const signature = new Uint8Array(await blob.slice(0, 4).arrayBuffer());
+      if (signature[0] !== 0x50 || signature[1] !== 0x4b) {
+        throw new Error('El archivo recibido no tiene la firma ZIP esperada de un APK.');
+      }
+
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${compilerAppName.replace(/\s+/g, '_')}_signed.apk.zip`;
+      a.download = `${compilerAppName.trim().replace(/[^a-zA-Z0-9_-]+/g, '_') || 'app'}-release.apk`;
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      onShowToast('¡APK firmado y listo para instalar descargado con éxito!', 'success');
+      a.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1500);
+      setCompileProgress(100);
+      setCompileStatusText('APK recibido y verificado.');
+      onShowToast('APK descargado desde el servicio de compilación.', 'success');
     } catch (err) {
-      onShowToast('Error al generar el APK.', 'error');
+      const message = err instanceof Error ? err.message : 'Error inesperado durante la compilación.';
+      setCompileStatusText(message);
+      onShowToast(message, 'error');
     } finally {
-      setTimeout(() => setIsCompiling(false), 2500);
+      setIsCompiling(false);
     }
   };
 
