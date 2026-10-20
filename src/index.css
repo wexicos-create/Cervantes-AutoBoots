@@ -1,1 +1,77 @@
 @import "tailwindcss";
+
+/* Cervantes Autobots — Obsidian / acid-lime workstation */
+:root {
+  color-scheme: dark;
+  --ca-bg: #090b0c;
+  --ca-panel: #111516;
+  --ca-panel-raised: #171c1d;
+  --ca-line: rgba(201, 255, 77, .16);
+  --ca-lime: #c9ff4d;
+  --ca-muted: #98a19b;
+  --ca-text: #f0f4ed;
+}
+html { min-height: 100%; background: var(--ca-bg); }
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 12% -12%, rgba(201,255,77,.09), transparent 38rem),
+    radial-gradient(ellipse at 100% 18%, rgba(103,255,204,.045), transparent 34rem),
+    var(--ca-bg);
+  color: var(--ca-text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: -.012em;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .13;
+  background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+#root { position: relative; min-height: 100vh; isolation: isolate; }
+header {
+  background: rgba(9, 11, 12, .88) !important;
+  border-color: rgba(201,255,77,.18) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.25) !important;
+  backdrop-filter: blur(22px) !important;
+}
+header [class*="from-blue-"], header [class*="via-indigo-"], header [class*="to-cyan-"] {
+  background: linear-gradient(135deg, #c9ff4d, #7fdc7b) !important;
+  color: #10140b !important;
+  box-shadow: 0 0 30px rgba(201,255,77,.12) !important;
+  border-color: rgba(201,255,77,.35) !important;
+}
+header [class*="text-cyan-"], header [class*="text-blue-"] { color: var(--ca-lime) !important; }
+[class*="bg-[#081330"], [class*="bg-[#060e26"], [class*="bg-zinc-900"] {
+  background-color: rgba(17,21,22,.94) !important;
+}
+[class*="border-blue-"], [class*="border-cyan-"], [class*="border-zinc-800"] {
+  border-color: var(--ca-line) !important;
+}
+[class*="text-cyan-"], [class*="text-emerald-"] { color: var(--ca-lime) !important; }
+button {
+  transition: transform .16s ease, border-color .16s ease, background-color .16s ease, box-shadow .16s ease;
+}
+button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid var(--ca-lime);
+  outline-offset: 3px;
+}
+button:active:not(:disabled) { transform: translateY(1px); }
+button:disabled { cursor: not-allowed; }
+input, textarea, select {
+  background-color: #090c0d !important;
+  border-color: rgba(201,255,77,.18) !important;
+  color: var(--ca-text) !important;
+}
+input::placeholder, textarea::placeholder { color: #68726c !important; }
+pre, code { tab-size: 2; }
+[class*="rounded-2xl"][class*="shadow"] { box-shadow: 0 18px 54px rgba(0,0,0,.20); }
+::selection { color: #10140b; background: var(--ca-lime); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
