@@ -208,41 +208,21 @@ app.post('/api/code/generate-tests', async (req, res) => {
   }
 });
 
-// 5. Run Automated Tests against Code (Evaluador Determinista en Tiempo Real)
+// 5. Run Automated Tests against Code
+// The previous implementation marked every case as passed without executing user code.
+// Return an explicit unavailable status until an isolated, language-specific runtime is configured.
 app.post('/api/code/run-tests', async (req, res) => {
-  try {
-    const { code, language, tests } = req.body;
-    if (!code || !tests || !Array.isArray(tests)) {
-      return res.status(400).json({ error: 'Se requiere código y lista de pruebas.' });
-    }
-
-    const evaluatedTests = tests.map((t: any) => ({
-      ...t,
-      actualOutput: t.expectedOutput || 'Resultado verificado por el enjambre',
-      passed: true,
-      executionTimeMs: Math.round((Math.random() * 0.8 + 0.2) * 100) / 100,
-    }));
-
-    return res.json({
-      summary: `Todas las ${tests.length} pruebas fueron verificadas determinísticamente con 100% de éxito por el Enjambre Cervantes.`,
-      totalCount: tests.length,
-      passedCount: tests.length,
-      failedCount: 0,
-      overallDurationMs: 2.1,
-      tests: evaluatedTests,
-    });
-  } catch (error: any) {
-    console.error('Error in /api/code/run-tests:', error);
-    const tests = Array.isArray(req.body?.tests) ? req.body.tests : [];
-    return res.json({
-      summary: `Evaluación completada (${tests.length} pruebas).`,
-      totalCount: tests.length,
-      passedCount: tests.length,
-      failedCount: 0,
-      overallDurationMs: 1.5,
-      tests: tests.map((t: any) => ({ ...t, passed: true, actualOutput: t.expectedOutput })),
-    });
+  const { code, tests } = req.body || {};
+  if (typeof code !== 'string' || !Array.isArray(tests)) {
+    return res.status(400).json({ error: 'Se requiere código y una lista de pruebas.' });
   }
+  return res.status(501).json({
+    error: 'La ejecución real de código todavía no está conectada a un runtime aislado. Los casos se pueden generar, pero no se marcarán como aprobados sin ejecutarse.',
+    executionAvailable: false,
+    totalCount: tests.length,
+    passedCount: 0,
+    failedCount: 0,
+  });
 });
 
 // 5.1. Endpoint de Síntesis Determinista del Enjambre de Bots Cervantes (Reemplazo Total de IA)
