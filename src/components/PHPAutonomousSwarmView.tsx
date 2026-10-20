@@ -330,7 +330,7 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
               <Activity className="w-3.5 h-3.5 text-cyan-400" />
             </div>
             <div className="text-xs sm:text-sm font-bold text-cyan-300 font-mono">
-              {metrics.latencyMs} ms / ciclo
+              {metrics.latencyMs > 0 ? `${metrics.latencyMs} ms` : 'No medido'}
             </div>
           </div>
 
