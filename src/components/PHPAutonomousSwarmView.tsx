@@ -47,10 +47,10 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
   const [activeTab, setActiveTab] = useState<'live-swarm' | 'php-code' | 'algorithm-surplus' | 'telemetry'>('live-swarm');
 
   const [metrics, setMetrics] = useState({
-    surplusValueGenerated: '+540% Eficiencia / $0 Intermediarios',
-    efficiencyRate: '99.99%',
-    latencyMs: 1.2,
-    zeroFaultAssurance: '100% Cero Fallas Certificado (PHP 8.2+)',
+    surplusValueGenerated: 'Sin medición real',
+    efficiencyRate: 'No medido',
+    latencyMs: 0,
+    zeroFaultAssurance: 'Sin garantía de cero fallas',
   });
 
   const [bots, setBots] = useState<DecentralizedPHPBot[]>([
@@ -58,33 +58,33 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
       id: 'php_daemon_architect',
       name: 'PHP Architect Daemon',
       specialty: 'Orquestación de Procesos & Concurrencia Fibers',
-      daemonState: 'running',
-      memoryUsageMb: 14.2,
-      autonomousCycles: 1420,
-      hashProof: '0x8f3c7a2b9e1d0f44',
-      lastAction: 'Pipeline zero-copy con tipado estricto verificado',
-      uptimeSeconds: 86400,
+      daemonState: 'stopped',
+      memoryUsageMb: 0,
+      autonomousCycles: 0,
+      hashProof: 'Sin ejecutar',
+      lastAction: 'Rol de referencia; no es un proceso activo',
+      uptimeSeconds: 0,
     },
     {
       id: 'php_daemon_synthesizer',
       name: 'PHP Logic Synthesizer',
       specialty: 'Generación Algorítmica & Sanitización SQLi/XSS',
-      daemonState: 'executing',
-      memoryUsageMb: 18.5,
-      autonomousCycles: 3840,
-      hashProof: '0x3e1a90bc84d52fe1',
-      lastAction: 'Transformación vectorial con GC recolector de ciclos',
+      daemonState: 'stopped',
+      memoryUsageMb: 0,
+      autonomousCycles: 0,
+      hashProof: 'Sin ejecutar',
+      lastAction: 'Rol de referencia; no es un proceso activo',
       uptimeSeconds: 86400,
     },
     {
       id: 'php_daemon_ledger',
       name: 'PHP Decentralized Ledger',
       specialty: 'Consenso Descentralizado & Proof-of-Execution',
-      daemonState: 'syncing',
-      memoryUsageMb: 22.1,
-      autonomousCycles: 910,
-      hashProof: '0x99a4c51e00df732b',
-      lastAction: 'Firmó bloque algorítmico inmutable SHA-256',
+      daemonState: 'stopped',
+      memoryUsageMb: 0,
+      autonomousCycles: 0,
+      hashProof: 'Sin ejecutar',
+      lastAction: 'Rol de referencia; no es un proceso activo',
       uptimeSeconds: 86400,
     },
     {
@@ -92,10 +92,10 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
       name: 'PHP Surplus Value Maximizer',
       specialty: 'Rendimiento Extremo & Supresión de Costes',
       daemonState: 'running',
-      memoryUsageMb: 12.0,
-      autonomousCycles: 5120,
-      hashProof: '0x2b87e6fa1103c899',
-      lastAction: 'Throughput maximizado a 1.2ms por ciclo',
+      memoryUsageMb: 0,
+      autonomousCycles: 0,
+      hashProof: 'Sin ejecutar',
+      lastAction: 'Rol de referencia; no es un proceso activo',
       uptimeSeconds: 86400,
     },
   ]);
@@ -107,7 +107,7 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
       botId: 'php_daemon_architect',
       botName: 'PHP Architect Daemon',
       level: 'info',
-      message: 'Descentralización iniciada: nodos PHP 8.2 conectados en topología peer-to-peer.',
+      message: 'Vista ilustrativa: no hay daemons PHP conectados.',
     },
     {
       id: 'log-init-2',
@@ -115,7 +115,7 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
       botId: 'php_daemon_synthesizer',
       botName: 'PHP Logic Synthesizer',
       level: 'success',
-      message: 'Regla de tipado estricto (declare(strict_types=1)) y 0 fallas garantizada.',
+      message: 'Los roles de esta pantalla son referencias visuales, no procesos en ejecución.',
     },
     {
       id: 'log-init-3',
@@ -123,60 +123,16 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
       botId: 'php_daemon_ledger',
       botName: 'PHP Decentralized Ledger',
       level: 'algorithm',
-      message: 'Hash de consenso criptográfico verificado con entropía de red.',
+      message: 'No se ha ejecutado un proceso ni generado una prueba de consenso.',
     },
   ]);
 
-  // Autonomous background cycle ticker when running
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-    if (isRunning) {
-      interval = setInterval(() => {
-        setBots((prev) =>
-          prev.map((bot) => {
-            const randomAdd = Math.floor(Math.random() * 3) + 1;
-            const newMem = Math.max(10, Math.min(48, Number((bot.memoryUsageMb + (Math.random() * 0.4 - 0.2)).toFixed(1))));
-            return {
-              ...bot,
-              autonomousCycles: bot.autonomousCycles + randomAdd,
-              memoryUsageMb: newMem,
-              uptimeSeconds: bot.uptimeSeconds + 2,
-            };
-          })
-        );
-
-        // Add real-time log event
-        const randomBot = bots[Math.floor(Math.random() * bots.length)];
-        const actions = [
-          'Ejecutó ciclo algorítmico asíncrono con latencia sub-milisegundo.',
-          'Consenso de bloque validado por prueba criptográfica distribuida.',
-          'Eliminó 0.04s de sobrecarga centralizada mediante balanceo peer.',
-          'Optimizó memoria RAM mediante recolección de ciclos forzada en PHP.',
-        ];
-        const randomAction = actions[Math.floor(Math.random() * actions.length)];
-
-        setLogs((prev) => [
-          {
-            id: 'log-' + Date.now() + Math.random(),
-            timestamp: new Date().toLocaleTimeString(),
-            botId: randomBot.id,
-            botName: randomBot.name,
-            level: Math.random() > 0.3 ? 'success' : 'algorithm',
-            message: `[${randomBot.name}] ${randomAction}`,
-          },
-          ...prev.slice(0, 35),
-        ]);
-      }, 2000);
-    }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isRunning, bots]);
+  // No synthetic background ticker: displayed counters must not impersonate live processes.
 
   // Request new Swarm synthesis
   const handleDispatchAutonomousSwarm = async () => {
     setIsSynthesizing(true);
-    setIsRunning(true);
+    setIsRunning(false);
 
     try {
       let data: any = null;
@@ -203,39 +159,15 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
       }
 
       if (!data) {
-        const now = new Date().toLocaleTimeString();
-        const hash = '0x' + Math.random().toString(16).substring(2, 10) + Math.random().toString(16).substring(2, 10);
-        data = {
-          swarmId: `PHP-AUTOSWARM-${Date.now().toString(36).toUpperCase()}`,
-          concept: `Motor Algorítmico PHP Autónomo: ${taskInput.slice(0, 50)}`,
-          surplusValueExplanation: 'Maximización del throughput y plusvalía algorítmica mediante micro-daemons asíncronos en PHP 8.2+ con recolección de ciclos forzada.',
-          architecture: 'Arquitectura descentralizada con anillo de consenso distribuido y pipelines zero-copy.',
-          metrics: {
-            surplusValueGenerated: '+540% Eficiencia / $0 Intermediarios',
-            efficiencyRate: '99.99%',
-            latencyMs: 1.2,
-            zeroFaultAssurance: '100% Cero Fallas Certificado (PHP 8.2+)',
-          },
-          phpCode: `<?php\ndeclare(strict_types=1);\n\nnamespace AutonomousSwarm\\Engine;\n\n/**\n * ENJAMBRE DESCENTRALIZADO DE BOTS PHP AUTÓNOMOS (PHP 8.2+)\n * Tarea: ${taskInput}\n * Hash de Consenso: ${hash}\n */\n\ninterface AutonomousAgentInterface {\n    public function getId(): string;\n    public function executeCycle(array $payload): array;\n    public function verifyProofOfWork(string $hash): bool;\n}\n\nfinal class WorkerBotDaemon implements AutonomousAgentInterface {\n    private string $id;\n    private int $cycles = 0;\n    private float $memoryThresholdMb;\n\n    public function __construct(string $id, float $memoryThresholdMb = 64.0) {\n        $this->id = $id;\n        $this->memoryThresholdMb = $memoryThresholdMb;\n    }\n\n    public function getId(): string {\n        return $this->id;\n    }\n\n    public function executeCycle(array $payload): array {\n        $this->cycles++;\n        $startTime = microtime(true);\n        $processedData = array_map(fn($item) => is_numeric($item) ? (float)$item * 1.18 : htmlspecialchars(trim((string)$item), ENT_QUOTES, 'UTF-8'), $payload);\n        $executionTimeMs = (microtime(true) - $startTime) * 1000;\n        $currentMemory = memory_get_usage(true) / 1024 / 1024;\n        if ($currentMemory > $this->memoryThresholdMb) { gc_collect_cycles(); }\n        $hashProof = hash('sha256', $this->id . '|' . $this->cycles . '|' . json_encode($processedData));\n        return [\n            'status' => 'success',\n            'agent_id' => $this->id,\n            'cycle' => $this->cycles,\n            'execution_time_ms' => round($executionTimeMs, 4),\n            'memory_mb' => round($currentMemory, 2),\n            'consensus_hash' => $hashProof,\n            'output' => $processedData,\n        ];\n    }\n\n    public function verifyProofOfWork(string $hash): bool {\n        return strlen($hash) === 64 && ctype_xdigit($hash);\n    }\n}\n`,
-          executionLogs: [
-            {
-              id: 'log-1',
-              timestamp: now,
-              botId: 'php_daemon_architect',
-              botName: 'PHP Architect Daemon',
-              level: 'info',
-              message: 'Despacho de daemon descentralizado en PHP 8.2 con recolección de ciclos activa.',
-            },
-            {
-              id: 'log-2',
-              timestamp: now,
-              botId: 'php_daemon_synthesizer',
-              botName: 'PHP Logic Synthesizer',
-              level: 'success',
-              message: 'Sintaxis PHP certificada: 0 Warnings, 0 Deprecations, Tipado Estricto.',
-            },
-          ],
-        };
+        setLogs((prev) => [{
+          id: 'connection-error-' + Date.now(),
+          timestamp: new Date().toLocaleTimeString(),
+          botId: 'api',
+          botName: 'API Cervantes',
+          level: 'error',
+          message: 'No se pudo conectar con el generador. No se inventó código, telemetría ni consenso.',
+        }, ...prev.slice(0, 20)]);
+        return;
       }
 
       setSwarmId(data.swarmId || `PHP-SWARM-${Date.now().toString(36).toUpperCase()}`);
@@ -290,17 +222,17 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
             <div>
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                  Enjambre Autónomo Descentralizado PHP
+                  Laboratorio de arquitectura PHP
                 </h2>
                 <span className="text-[10px] font-mono font-extrabold px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40">
-                  PHP 8.2+ FIBERS DAEMONS
+                  GENERACIÓN DE CÓDIGO
                 </span>
                 <span className="text-[10px] font-mono font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3" /> CERO FALLAS 100%
+                  <ShieldCheck className="w-3 h-3" /> SIN EJECUCIÓN REAL
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-zinc-300 mt-1 max-w-3xl">
-                Autonomía descentralizada para algoritmos y programación con Bots PHP daemonizados. Maximiza la plusvalía computacional, acelera la tasa de respuesta y garantiza cero errores de sintaxis y lógica en tiempo real.
+                Genera una plantilla PHP a partir de tu indicación. Esta vista no inicia procesos PHP, no conecta nodos y no mide rendimiento; revisa el código generado antes de usarlo.
               </p>
             </div>
           </div>
@@ -318,12 +250,12 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
               {isRunning ? (
                 <>
                   <Square className="w-4 h-4 fill-current" />
-                  <span>Pausar Daemon Autónomo</span>
+                  <span>Ocultar modo de referencia</span>
                 </>
               ) : (
                 <>
                   <Play className="w-4 h-4 fill-current" />
-                  <span>Activar Daemon Autónomo</span>
+                  <span>Mostrar modo de referencia</span>
                 </>
               )}
             </button>
@@ -335,9 +267,9 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
           <label className="text-xs font-semibold text-zinc-300 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
               <Zap className="w-3.5 h-3.5 text-amber-400" />
-              <span>Directiva de Optimización Algorítmica & Descentralización:</span>
+              <span>¿Qué quieres construir en PHP?</span>
             </span>
-            <span className="text-[11px] font-mono text-purple-400">ID de Red: {swarmId}</span>
+            <span className="text-[11px] font-mono text-purple-400">ID de generación: {swarmId}</span>
           </label>
           <div className="flex flex-col sm:flex-row gap-2">
             <input
@@ -355,12 +287,12 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
               {isSynthesizing ? (
                 <>
                   <div className="w-4 h-4 border-2 border-zinc-950 border-t-transparent rounded-full animate-spin" />
-                  <span>Sintetizando Enjambre...</span>
+                  <span>Generando código...</span>
                 </>
               ) : (
                 <>
                   <Flame className="w-4 h-4 fill-current" />
-                  <span>Despachar Bots PHP & Algoritmo</span>
+                  <span>Generar plantilla PHP</span>
                 </>
               )}
             </button>
@@ -371,7 +303,7 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6 pt-4 border-t border-zinc-800/80 relative z-10">
           <div className="bg-zinc-950/80 border border-zinc-800 p-3.5 rounded-2xl">
             <div className="flex items-center justify-between text-zinc-400 text-[11px] mb-1">
-              <span>Plusvalía Algorítmica</span>
+              <span>Resultado medido</span>
               <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
             </div>
             <div className="text-xs sm:text-sm font-bold text-emerald-400 font-mono">
@@ -381,7 +313,7 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
 
           <div className="bg-zinc-950/80 border border-zinc-800 p-3.5 rounded-2xl">
             <div className="flex items-center justify-between text-zinc-400 text-[11px] mb-1">
-              <span>Tasa de Eficiencia</span>
+              <span>Eficiencia medida</span>
               <Cpu className="w-3.5 h-3.5 text-purple-400" />
             </div>
             <div className="text-xs sm:text-sm font-bold text-purple-300 font-mono">
@@ -391,7 +323,7 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
 
           <div className="bg-zinc-950/80 border border-zinc-800 p-3.5 rounded-2xl">
             <div className="flex items-center justify-between text-zinc-400 text-[11px] mb-1">
-              <span>Latencia de Consenso</span>
+              <span>Latencia real</span>
               <Activity className="w-3.5 h-3.5 text-cyan-400" />
             </div>
             <div className="text-xs sm:text-sm font-bold text-cyan-300 font-mono">
@@ -401,7 +333,7 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
 
           <div className="bg-zinc-950/80 border border-zinc-800 p-3.5 rounded-2xl">
             <div className="flex items-center justify-between text-zinc-400 text-[11px] mb-1">
-              <span>Garantía Sintáctica & Tipos</span>
+              <span>Garantía de calidad</span>
               <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
             </div>
             <div className="text-xs sm:text-sm font-bold text-amber-300 font-mono truncate">
@@ -411,7 +343,7 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
         </div>
       </div>
 
-      {/* 4 Decentralized PHP Bots Node Cards */}
+      {/* Reference roles — not live processes */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {bots.map((bot) => (
           <div
