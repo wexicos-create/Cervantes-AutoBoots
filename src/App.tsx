@@ -66,7 +66,7 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
 
   // Layout & Windows Management
-  const [workspaceLayout, setWorkspaceLayout] = useState<WorkspaceLayout>('free_windows');
+  const [workspaceLayout, setWorkspaceLayout] = useState<WorkspaceLayout>('focus_single');
   const [activeWindowId, setActiveWindowId] = useState<string | null>('editor');
   const [topZIndex, setTopZIndex] = useState<number>(10);
 
@@ -680,12 +680,18 @@ export default function App() {
 
       if (!data) {
         data = {
-          summary: 'Pruebas verificadas localmente con motor determinista.',
+          summary: 'No se pudieron ejecutar las pruebas: el servicio de ejecución no respondió. No se considera aprobado ningún caso.',
           totalCount: testsToRun.length,
-          passedCount: testsToRun.length,
-          failedCount: 0,
-          overallDurationMs: 1.8,
-          tests: testsToRun.map((t) => ({ ...t, passed: true, actualOutput: t.expectedOutput })),
+          passedCount: 0,
+          failedCount: testsToRun.length,
+          overallDurationMs: 0,
+          tests: testsToRun.map((t) => ({
+            ...t,
+            passed: false,
+            actualOutput: 'No ejecutada',
+            errorMessage: 'Ejecución no disponible: no hubo respuesta de /api/code/run-tests.',
+          })),
+          executionUnavailable: true,
         };
       }
 
@@ -693,7 +699,12 @@ export default function App() {
         ...data,
         testFrameworkCode: prev?.testFrameworkCode || '',
       }));
-      showToast(`Pruebas ejecutadas: ${data.passedCount}/${data.totalCount} pasaron.`, 'success');
+      showToast(
+        data.executionUnavailable
+          ? 'Pruebas NO ejecutadas: el servicio no está disponible.'
+          : `Pruebas ejecutadas: ${data.passedCount}/${data.totalCount} pasaron.`,
+        data.executionUnavailable ? 'error' : (data.failedCount > 0 ? 'error' : 'success')
+      );
     } catch (error: any) {
       console.error(error);
       showToast('Pruebas completadas.', 'info');
