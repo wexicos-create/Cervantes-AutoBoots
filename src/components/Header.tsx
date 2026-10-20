@@ -52,7 +52,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-end gap-3">
               <span className="text-base sm:text-lg font-black text-white tracking-tight flex flex-col leading-none drop-shadow-[0_0_12px_rgba(56,189,248,0.4)]">
                 <span>Cervantes</span>
-                <span className="text-cyan-400 font-mono text-xs font-bold">Code</span>
+                <span className="text-cyan-400 font-mono text-xs font-bold">Autobots</span>
               </span>
               <button
                 onClick={onOpenAuthorshipModal}
@@ -73,10 +73,10 @@ export const Header: React.FC<HeaderProps> = ({
             id="header-apk-cloud-btn"
             onClick={() => onOpenWindow && onOpenWindow('apk-cloud')}
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-white text-xs font-black shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] border-2 border-emerald-300/50 transition-all cursor-pointer active:scale-95 ring-2 ring-emerald-400/30 whitespace-nowrap shrink-0"
-            title="Compilador APK Android (Subir .zip, compilar, firmar y obtener APK)"
+            title="Requiere un worker Android Gradle conectado; esta función todavía no está habilitada."
           >
             <Cloud className="w-4 h-4 stroke-[2.5]" />
-            <span className="tracking-tight">Compilador APK Android</span>
+            <span className="tracking-tight">Compilación Android</span>
           </button>
 
           {/* FORO COMUNITARIO: RESPALDO DE AUTORÍA E INVENTOS */}
