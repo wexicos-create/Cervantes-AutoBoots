@@ -619,36 +619,52 @@ export default function App() {
       }
 
       if (!suiteData) {
-        const deterministicSuite = generateTestsDeterministically(code, selectedLanguage);
+        const generated = generateTestsDeterministically(code, selectedLanguage);
         suiteData = {
-          summary: deterministicSuite.summary,
-          testFrameworkCode: deterministicSuite.testFrameworkCode,
-          totalCount: deterministicSuite.tests.length,
-          passedCount: deterministicSuite.tests.length,
-          failedCount: 0,
-          overallDurationMs: 2.1,
-          tests: deterministicSuite.tests.map((t) => ({ ...t, passed: true, actualOutput: t.expectedOutput })),
+          summary: 'Casos generados, pero NO ejecutados: el servicio de pruebas no está disponible. No se declara ningún caso aprobado.',
+          testFrameworkCode: generated.testFrameworkCode,
+          totalCount: generated.tests.length,
+          passedCount: 0,
+          failedCount: generated.tests.length,
+          overallDurationMs: 0,
+          tests: generated.tests.map((t) => ({
+            ...t,
+            passed: false,
+            actualOutput: 'No ejecutada',
+            errorMessage: 'No hay un runtime de ejecución conectado.',
+          })),
+          executionUnavailable: true,
         };
       }
 
       setTestSuiteResult(suiteData);
       focusWindow('tests');
-      showToast(`Suite de pruebas generada: ${suiteData.passedCount}/${suiteData.totalCount} pasadas.`, 'success');
+      showToast(
+        suiteData.executionUnavailable
+          ? 'Casos generados, pero no ejecutados: runtime no disponible.'
+          : `Suite procesada: ${suiteData.passedCount}/${suiteData.totalCount} pasaron.`,
+        suiteData.executionUnavailable ? 'error' : (suiteData.failedCount > 0 ? 'error' : 'success')
+      );
     } catch (error: any) {
       console.error(error);
-      const safeSuite = generateTestsDeterministically(code, selectedLanguage);
+      const generated = generateTestsDeterministically(code, selectedLanguage);
       const safeResult: TestSuiteResult = {
-        summary: safeSuite.summary,
-        testFrameworkCode: safeSuite.testFrameworkCode,
-        totalCount: safeSuite.tests.length,
-        passedCount: safeSuite.tests.length,
-        failedCount: 0,
-        overallDurationMs: 2.0,
-        tests: safeSuite.tests.map((t) => ({ ...t, passed: true, actualOutput: t.expectedOutput })),
+        summary: 'No fue posible ejecutar los casos. Se muestran como no ejecutados, nunca como aprobados.',
+        testFrameworkCode: generated.testFrameworkCode,
+        totalCount: generated.tests.length,
+        passedCount: 0,
+        failedCount: generated.tests.length,
+        overallDurationMs: 0,
+        tests: generated.tests.map((t) => ({
+          ...t,
+          passed: false,
+          actualOutput: 'No ejecutada',
+          errorMessage: 'No hay un runtime de ejecución conectado.',
+        })),
       };
       setTestSuiteResult(safeResult);
       focusWindow('tests');
-      showToast(`Suite de pruebas generada: ${safeResult.passedCount}/${safeResult.totalCount} pasadas.`, 'success');
+      showToast('No se ejecutaron pruebas: el runtime no está disponible.', 'error');
     } finally {
       setIsLoading(false);
       setActiveAction(null);
