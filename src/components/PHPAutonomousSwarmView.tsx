@@ -208,6 +208,9 @@ export const PHPAutonomousSwarmView: React.FC<PHPAutonomousSwarmViewProps> = ({ 
 
   return (
     <div className="space-y-6">
+      <div role="note" className="rounded-2xl border border-lime-300/20 bg-lime-300/[0.06] px-4 py-3 text-sm text-zinc-200">
+        <strong className="text-lime-300">Cómo funciona:</strong> esta herramienta genera una plantilla PHP usando reglas locales. “Enjambre” describe la idea de repartir tareas entre agentes; en esta versión no hay agentes remotos activos, ejecución PHP, métricas de rendimiento ni consenso distribuido.
+      </div>
       {/* Top Banner: Decentralized Engine Header */}
       <div className="bg-gradient-to-r from-zinc-950 via-purple-950/30 to-zinc-950 border border-purple-500/30 rounded-3xl p-6 sm:p-7 shadow-2xl relative overflow-hidden">
         {/* Glow ambient */}
