@@ -130,21 +130,22 @@ export const APKCloudBridgeView: React.FC<APKCloudBridgeViewProps> = ({
     handleRebuildSolution(updated);
   };
 
-  const handleRunPingTest = () => {
+  const handleRunPingTest = async () => {
     setSimulatedPing({ running: true, result: null });
-    setTimeout(() => {
-      const latency = Math.floor(Math.random() * 35) + 18;
+    const startedAt = performance.now();
+    try {
+      const response = await fetch('/api/health', { method: 'GET', cache: 'no-store' });
+      const latency = Math.round(performance.now() - startedAt);
+      if (!response.ok) throw new Error(`Health check HTTP ${response.status}`);
       setSimulatedPing({
         running: false,
-        result: {
-          status: 200,
-          latencyMs: latency,
-          region: config.cloudProvider === 'gcp' ? 'us-east1 (Google Cloud)' : config.cloudProvider === 'aws' ? 'us-east-1 (AWS Fargate)' : 'Global Anycast CDN',
-          handshakeOk: true,
-        },
+        result: { status: response.status, latencyMs: latency, region: 'API de este despliegue', handshakeOk: true },
       });
-      onShowToast(`Conexión con la infraestructura OK (${latency}ms)`, 'success');
-    }, 600);
+      onShowToast(`API disponible: respuesta real en ${latency} ms.`, 'success');
+    } catch {
+      setSimulatedPing({ running: false, result: { status: 0, latencyMs: Math.round(performance.now() - startedAt), region: 'Sin conexión con API', handshakeOk: false } });
+      onShowToast('No se pudo contactar la API. No se simularon resultados.', 'error');
+    }
   };
 
   const handleDownloadZip = async () => {
