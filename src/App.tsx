@@ -139,7 +139,7 @@ export default function App() {
     },
     'ollama-synthesis': {
       id: 'ollama-synthesis',
-      title: 'Síntesis Ollama & Enjambre Bots',
+      title: 'Modelos locales y conexiones',
       icon: <Cpu className="w-4 h-4" />,
       badge: 'MODELOS LIBRES',
       badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
@@ -163,7 +163,7 @@ export default function App() {
       id: 'diagnostics',
       title: 'Diagnóstico & Reparador de Fallas',
       icon: <Bug className="w-4 h-4" />,
-      badge: '0 BUGS',
+      badge: 'ANÁLISIS ESTÁTICO',
       badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
       isOpen: false,
       isMinimized: false,
@@ -172,9 +172,9 @@ export default function App() {
     },
     tests: {
       id: 'tests',
-      title: 'Suite de Pruebas Automáticas',
+      title: 'Casos de prueba',
       icon: <Play className="w-4 h-4" />,
-      badge: 'QA CERTIFIED',
+      badge: 'EJECUCIÓN NO DISPONIBLE',
       badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
       isOpen: false,
       isMinimized: false,
@@ -1024,9 +1024,9 @@ export default function App() {
           {windows['ollama-synthesis']?.isOpen && (
             <WindowFrame
               id="ollama-synthesis"
-              title="Síntesis Ollama & Enjambre de Bots"
+              title="Modelos locales y conexiones"
               icon={<Cpu className="w-4 h-4 text-purple-400" />}
-              badge="ENJAMBRE SIN RESTRICCIÓN"
+              badge="ESTADO DEL MODELO"
               badgeColor="bg-purple-500/20 text-purple-300 border-purple-500/50"
               isMinimized={windows['ollama-synthesis'].isMinimized}
               isMaximized={windows['ollama-synthesis'].isMaximized}
@@ -1134,7 +1134,7 @@ export default function App() {
               id="design"
               title="Diseño Auto-Bot (0 Bugs)"
               icon={<Bot className="w-4 h-4 text-emerald-400" />}
-              badge="ENJAMBRE AUTÓNOMO"
+              badge="DISEÑO ASISTIDO"
               badgeColor="bg-emerald-500/20 text-emerald-300 border-emerald-400/50"
               isMinimized={windows.design.isMinimized}
               isMaximized={windows.design.isMaximized}
@@ -1159,7 +1159,7 @@ export default function App() {
           {windows['php-swarm'].isOpen && (
             <WindowFrame
               id="php-swarm"
-              title="Enjambre PHP Autónomo"
+              title="Laboratorio PHP (simulación)"
               icon={<Server className="w-4 h-4 text-purple-400" />}
               badge="DESCENTRALIZADO"
               badgeColor="bg-purple-500/20 text-purple-300 border-purple-500/50"
